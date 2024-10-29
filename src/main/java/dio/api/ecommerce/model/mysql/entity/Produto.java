@@ -2,19 +2,16 @@ package dio.api.ecommerce.model.mysql.entity;
 
 import jakarta.persistence.*;
 
-//usar mysql ao inves de mongodb
-
-
 @Entity
 @Table(name = "produtos")
 public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_produto", nullable = false, updatable = false, insertable = false)
+    @Column(name = "id_produto", nullable = false, updatable = false, insertable = false, unique = true)
     private Long _id;
 
-    @Column(name = "nome_produto", nullable = false)
+    @Column(name = "nome_produto", nullable = false, unique = true)
     private String nome;
 
     @Column(name = "descricao_produto")

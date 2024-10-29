@@ -3,7 +3,6 @@ package dio.api.ecommerce.model.mysql;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,15 +22,25 @@ import javax.sql.DataSource;
 )
 public class MySQLConfig {
 
+    @Value("${spring.datasource.url}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
 
     @Bean(name = "mysqlDataSource")
     public DataSource mysqlDataSource() {
         return DataSourceBuilder.create()
-                //properties mysql.link
-                .url("jdbc:mysql://localhost:3306/ecommerce")
-                .username("root")
-                .password("root")
-                .driverClassName("com.mysql.cj.jdbc.Driver")
+                .url(url)
+                .username(username)
+                .password(password)
+                .driverClassName(driverClassName)
                 .build();
     }
 
@@ -42,7 +51,7 @@ public class MySQLConfig {
             @Qualifier("mysqlDataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("dio.api.ecommerce.model.mysql.entity") // Pacote das entidades MySQL
+                .packages("dio.api.ecommerce.model.mysql.entity")
                 .persistenceUnit("mysql")
                 .build();
     }

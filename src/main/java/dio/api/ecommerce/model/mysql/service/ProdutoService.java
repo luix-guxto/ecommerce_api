@@ -2,6 +2,7 @@ package dio.api.ecommerce.model.mysql.service;
 
 import dio.api.ecommerce.model.mysql.entity.Produto;
 import dio.api.ecommerce.model.mysql.repository.ProdutoRepository;
+import dio.api.ecommerce.util.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,30 @@ public class ProdutoService {
         return produtoRepository.findById(id).orElse(null);
     }
 
-    public Produto save(Produto produto) {
-        return produtoRepository.save(produto);
+    public Produto findByName(String nome){
+        return produtoRepository.findByName(nome);
+    }
+
+    public List<Produto> findByStatus(String status){
+        return produtoRepository.findByStatus(status);
+    }
+
+    public String save(Produto produto) {
+        try{
+            if(!Status.STATUS.contains(produto.getStatus())){
+                throw  new IllegalArgumentException("Status invalido!");
+            }
+            if(produto.getPreco() <= 0){
+                throw  new IllegalArgumentException("Preço invalido!");
+            }
+            produtoRepository.save(produto);
+            return produto.toString();
+        }
+        catch (Exception e){
+            return e.getMessage();
+        }
+
+
     }
 
     public void deleteById(Long id) {
